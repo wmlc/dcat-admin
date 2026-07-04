@@ -36,6 +36,11 @@ abstract class Action implements Renderable
     /**
      * @var string
      */
+    public $selectorPrefix;
+
+    /**
+     * @var string
+     */
     protected $method = 'POST';
 
     /**
