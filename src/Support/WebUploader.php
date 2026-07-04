@@ -25,6 +25,31 @@ class WebUploader
 
     protected $completeFile;
 
+    /**
+     * @var string
+     */
+    public $_id;
+
+    /**
+     * @var int
+     */
+    public $chunk;
+
+    /**
+     * @var int
+     */
+    public $chunks;
+
+    /**
+     * @var string
+     */
+    public $upload_column;
+
+    /**
+     * @var UploadedFile
+     */
+    public $file;
+
     public function __construct(Request $request = null)
     {
         $request = $this->prepareRequest($request ?: request());
