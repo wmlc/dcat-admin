@@ -312,7 +312,7 @@ class Grid
      */
     public function isAsyncRequest()
     {
-        return $this->request->get(static::ASYNC_NAME);
+        return $this->request->input(static::ASYNC_NAME);
     }
 
     /**

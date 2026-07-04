@@ -132,7 +132,7 @@ class Selector
             return $this->selected;
         }
 
-        $selected = $this->request->get($this->getQueryName(), []);
+        $selected = $this->request->input($this->getQueryName(), []);
         if (! is_array($selected)) {
             return [];
         }

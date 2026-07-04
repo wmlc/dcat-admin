@@ -48,7 +48,7 @@ trait HasNames
      */
     public function getRequestInput($key)
     {
-        return $this->request->get($this->makeName($key));
+        return $this->request->input($this->makeName($key));
     }
 
     /**

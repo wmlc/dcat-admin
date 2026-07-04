@@ -103,7 +103,7 @@ trait CanHidesColumns
             return $this->visibleColumnsFromQuery;
         }
 
-        $columns = $input = Helper::array($this->request->get($this->getColumnSelectorQueryName()));
+        $columns = $input = Helper::array($this->request->input($this->getColumnSelectorQueryName()));
 
         if (! $input && ! $this->hasColumnSelectorRequestInput()) {
             $columns = $this->getVisibleColumnsFromStorage() ?: array_values(array_diff(

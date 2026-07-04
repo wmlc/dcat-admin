@@ -52,7 +52,7 @@ class Sorter implements Renderable
      */
     protected function isSorted()
     {
-        $this->sort = app('request')->get($this->getSortName());
+        $this->sort = app('request')->input($this->getSortName());
 
         if (empty($this->sort)) {
             return false;
