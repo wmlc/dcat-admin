@@ -111,11 +111,11 @@ class ScaffoldController extends Controller
         $paths = [];
         $message = '';
 
-        $creates = (array) $request->get('create');
-        $table = Helper::slug($request->get('table_name'), '_');
-        $controller = $request->get('controller_name');
-        $model = $request->get('model_name');
-        $repository = $request->get('repository_name');
+        $creates = (array) $request->input('create');
+        $table = Helper::slug($request->input('table_name'), '_');
+        $controller = $request->input('controller_name');
+        $model = $request->input('model_name');
+        $repository = $request->input('repository_name');
 
         try {
             // 1. Create model.
@@ -123,9 +123,9 @@ class ScaffoldController extends Controller
                 $modelCreator = new ModelCreator($table, $model);
 
                 $paths['model'] = $modelCreator->create(
-                    $request->get('primary_key'),
-                    $request->get('timestamps') == 1,
-                    $request->get('soft_deletes') == 1
+                    $request->input('primary_key'),
+                    $request->input('timestamps') == 1,
+                    $request->input('soft_deletes') == 1
                 );
             }
 
@@ -140,16 +140,16 @@ class ScaffoldController extends Controller
                 $migrationName = 'create_'.$table.'_table';
 
                 $paths['migration'] = (new MigrationCreator(app('files')))->buildBluePrint(
-                    $request->get('fields'),
-                    $request->get('primary_key', 'id'),
-                    $request->get('timestamps') == 1,
-                    $request->get('soft_deletes') == 1
+                    $request->input('fields'),
+                    $request->input('primary_key', 'id'),
+                    $request->input('timestamps') == 1,
+                    $request->input('soft_deletes') == 1
                 )->create($migrationName, database_path('migrations'), $table);
             }
 
             if (in_array('lang', $creates)) {
-                $paths['lang'] = (new LangCreator($request->get('fields')))
-                    ->create($controller, $request->get('translate_title'));
+                $paths['lang'] = (new LangCreator($request->input('fields')))
+                    ->create($controller, $request->input('translate_title'));
             }
 
             if (in_array('repository', $creates)) {

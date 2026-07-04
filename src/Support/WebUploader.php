@@ -29,17 +29,17 @@ class WebUploader
     {
         $request = $this->prepareRequest($request ?: request());
 
-        $this->_id = $request->get('_id');
-        $this->chunk = $request->get('chunk');
-        $this->chunks = $request->get('chunks');
-        $this->upload_column = $request->get('upload_column');
+        $this->_id = $request->input('_id');
+        $this->chunk = $request->input('chunk');
+        $this->chunks = $request->input('chunks');
+        $this->upload_column = $request->input('upload_column');
         $this->file = $request->file(static::FILE_NAME);
     }
 
     protected function prepareRequest($request)
     {
-        $relation = $request->get('_relation');
-        if (! $relation || ! is_string($relation)) {
+        $relation = $request->input('_relation');
+        if (!$relation || !is_string($relation)) {
             return $request;
         }
 
@@ -68,9 +68,9 @@ class WebUploader
         $file = $this->file;
 
         if (
-            ! $file
-            || ! $this->upload_column
-            || ! $file instanceof UploadedFile
+            !$file
+            || !$this->upload_column
+            || !$file instanceof UploadedFile
         ) {
             return false;
         }
@@ -87,11 +87,11 @@ class WebUploader
     {
         $file = $this->file;
 
-        if (! $file || ! $file instanceof UploadedFile) {
+        if (!$file || !$file instanceof UploadedFile) {
             return;
         }
 
-        if (! $this->hasChunkFile()) {
+        if (!$this->hasChunkFile()) {
             return $file;
         }
 
@@ -107,13 +107,13 @@ class WebUploader
      */
     public function deleteTemporaryFile()
     {
-        if (! $this->temporaryFilePath) {
+        if (!$this->temporaryFilePath) {
             return;
         }
         @unlink($this->temporaryFilePath);
 
         if (
-            ! Finder::create()
+            !Finder::create()
                 ->in($dir = dirname($this->temporaryFilePath))
                 ->files()
                 ->count()
@@ -125,7 +125,7 @@ class WebUploader
     /**
      * 合并分块文件.
      *
-     * @param  UploadedFile  $file
+     * @param UploadedFile $file
      * @return UploadedFile|false
      */
     protected function mergeChunks(UploadedFile $file)
@@ -137,11 +137,11 @@ class WebUploader
         $this->moveChunk($file, $tmpDir, $newFilename);
 
         // 判断所有分块是否上传完毕.
-        if (! $this->isComplete($tmpDir, $newFilename)) {
+        if (!$this->isComplete($tmpDir, $newFilename)) {
             return false;
         }
 
-        $this->temporaryFilePath = $tmpDir.'/'.$newFilename.'.tmp';
+        $this->temporaryFilePath = $tmpDir . '/' . $newFilename . '.tmp';
 
         $this->putTempFileContent($this->temporaryFilePath, $tmpDir, $newFilename);
 
@@ -157,14 +157,14 @@ class WebUploader
     /**
      * 判断所有分块是否上传完毕.
      *
-     * @param  string  $tmpDir
-     * @param  string  $newFilename
+     * @param string $tmpDir
+     * @param string $newFilename
      * @return bool
      */
     protected function isComplete($tmpDir, $newFilename)
     {
         for ($index = 0; $index < $this->chunks; $index++) {
-            if (! is_file("{$tmpDir}/{$newFilename}.{$index}.part")) {
+            if (!is_file("{$tmpDir}/{$newFilename}.{$index}.part")) {
                 return false;
             }
         }
@@ -175,9 +175,9 @@ class WebUploader
     /**
      * 移动分块文件到临时目录.
      *
-     * @param  UploadedFile  $file
-     * @param  string  $tmpDir
-     * @param  string  $newFilename
+     * @param UploadedFile $file
+     * @param string $tmpDir
+     * @param string $newFilename
      */
     protected function moveChunk(UploadedFile $file, $tmpDir, $newFilename)
     {
@@ -185,9 +185,9 @@ class WebUploader
     }
 
     /**
-     * @param  string  $path
-     * @param  string  $tmpDir
-     * @param  string  $newFilename
+     * @param string $path
+     * @param string $tmpDir
+     * @param string $newFilename
      */
     protected function putTempFileContent($path, $tmpDir, $newFileame)
     {
@@ -196,7 +196,7 @@ class WebUploader
         if (flock($out, LOCK_EX)) {
             for ($index = 0; $index < $this->chunks; $index++) {
                 $partPath = "{$tmpDir}/{$newFileame}.{$index}.part";
-                if (! $in = @fopen($partPath, 'rb')) {
+                if (!$in = @fopen($partPath, 'rb')) {
                     break;
                 }
 
@@ -217,7 +217,7 @@ class WebUploader
     /**
      * 生成分块文件名称.
      *
-     * @param  UploadedFile  $file
+     * @param UploadedFile $file
      * @return string
      */
     protected function generateChunkFileName(UploadedFile $file)
@@ -228,12 +228,12 @@ class WebUploader
     /**
      * 获取临时文件路径.
      *
-     * @param  mixed  $path
+     * @param mixed $path
      * @return string
      */
     public function getTemporaryPath($path)
     {
-        return $this->getTemporaryDirectory().'/'.$path;
+        return $this->getTemporaryDirectory() . '/' . $path;
     }
 
     /**
@@ -245,7 +245,7 @@ class WebUploader
     {
         $dir = storage_path($this->temporaryDirectory);
 
-        if (! is_dir($dir)) {
+        if (!is_dir($dir)) {
             app('files')->makeDirectory($dir, 0755, true);
         }
 

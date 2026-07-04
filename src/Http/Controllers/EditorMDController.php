@@ -12,7 +12,7 @@ class EditorMDController
     public function upload(Request $request)
     {
         $file = $request->file('editormd-image-file');
-        $dir = trim($request->get('dir'), '/');
+        $dir = trim($request->input('dir'), '/');
         $disk = $this->disk();
 
         $newName = $this->generateNewName($file);
@@ -32,7 +32,7 @@ class EditorMDController
      */
     protected function disk()
     {
-        $disk = request()->get('disk') ?: config('admin.upload.disk');
+        $disk = request()->input('disk') ?: config('admin.upload.disk');
 
         return Storage::disk($disk);
     }

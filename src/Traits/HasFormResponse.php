@@ -62,7 +62,7 @@ trait HasFormResponse
         /* @var Request $request */
         $request = $request ?: (empty($this->request) ? request() : $this->request);
 
-        if ($current = $request->get(static::CURRENT_URL_NAME)) {
+        if ($current = $request->input(static::CURRENT_URL_NAME)) {
             return admin_url($current);
         }
 

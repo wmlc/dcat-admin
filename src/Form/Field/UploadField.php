@@ -182,7 +182,7 @@ trait UploadField
     {
         $request = request();
 
-        $id = $request->get('_id');
+        $id = $request->input('_id');
 
         if (! $id) {
             return $this->responseErrorMessage('Missing id');
