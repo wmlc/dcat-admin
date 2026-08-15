@@ -30,19 +30,17 @@ class DatabaseUpdater
 
         $this->isValidScript($object);
 
-        Model::unguard();
+        Model::unguarded(function () use ($object, $callback) {
+            $this->transaction(function () use ($object, $callback) {
+                if ($object instanceof Migration) {
+                    $object->up();
+                } elseif ($object instanceof Seeder) {
+                    $object->run();
+                }
 
-        $this->transaction(function () use ($object, $callback) {
-            if ($object instanceof Migration) {
-                $object->up();
-            } elseif ($object instanceof Seeder) {
-                $object->run();
-            }
-
-            $callback && $callback();
+                $callback && $callback();
+            });
         });
-
-        Model::reguard();
 
         return true;
     }
@@ -60,17 +58,15 @@ class DatabaseUpdater
 
         $this->isValidScript($object);
 
-        Model::unguard();
+        Model::unguarded(function () use ($object, $callback) {
+            $this->transaction(function () use ($object, $callback) {
+                if ($object instanceof Migration) {
+                    $object->down();
+                }
 
-        $this->transaction(function () use ($object, $callback) {
-            if ($object instanceof Migration) {
-                $object->down();
-            }
-
-            $callback && $callback();
+                $callback && $callback();
+            });
         });
-
-        Model::reguard();
 
         return true;
     }
