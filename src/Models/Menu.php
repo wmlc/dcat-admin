@@ -36,7 +36,7 @@ class Menu extends Model implements Sortable
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri', 'extension', 'show'];
+    protected $fillable = ['parent_id', 'order', 'title', 'icon', 'uri', 'extension', 'show', 'module'];
 
     /**
      * Create a new Eloquent model instance.
