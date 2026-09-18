@@ -1,13 +1,12 @@
 <p align=""><code>Dcat Admin</code>是一个基于<a href="https://www.laravel-admin.org/" target="_blank">laravel-admin</a>二次开发而成的后台系统构建工具，只需很少的代码即可快速构建出一个功能完善的高颜值后台系统。内置丰富的后台常用组件，开箱即用，让开发者告别冗杂的HTML代码，对后端开发者非常友好。</p>
 
+> 本仓库为 `dcat-admin` 的持续维护分支，已适配最新 Laravel 版本，修复了已知兼容性问题。
+>
+> **版本说明：** 3.x 版本要求 Laravel >= 13；若你的 Laravel 版本小于 13，请使用 `2.3.2` 及以下版本：`composer require wmlc/laravel-admin:"^2.3"`
 
-- [官方网站](http://www.dcatadmin.com)
+- [GitHub 仓库](https://github.com/wmlc/dcat-admin)
 - [中文文档](https://learnku.com/docs/dcat-admin)
-- [English documentions](http://www.dcatadmin.com/docs/en-2.x/quick-start.html)
-- [Demo / 在线演示](http://103.39.211.179:8080/admin)
-- [Demo源码](https://github.com/jqhph/dcat-admin-demo)
-- [Demo源码 (码云)](https://gitee.com/jqhph/dcat-admin-demo)
-- [扩展](#)
+- [Demo 源码](https://github.com/jqhph/dcat-admin-demo)
 
 
 ![](https://cdn.learnku.com/uploads/images/202101/28/38389/YLmL7PLqH7.png!large)
@@ -38,7 +37,6 @@
 - [x] `Section`功能（类似`Wordpress`的`Filter`和`blade`模板的`section`标签）
 - [x] 异步文件上传表单，支持分块多线程上传
 - [x] 多应用
-- [ ] 插件市场，只需在管理页面轻轻点击鼠标即可完成插件的安装、更新和卸载等操作
 
 
 ### 环境
@@ -48,10 +46,8 @@
 
 ### 安装
 
-首先需要安装`laravel`框架，如已安装可以跳过此步骤。如果您是第一次使用`laravel`，请务必先阅读文档 [安装 《Laravel中文文档》](https://learnku.com/docs/laravel/8.x/installation/9354) ！
+首先需要安装`laravel`框架，如已安装可以跳过此步骤。如果您是第一次使用`laravel`，请务必先阅读文档 [安装 《Laravel中文文档》](https://learnku.com/docs/laravel/13.x/installation) ！
 ```bash
-composer create-project --prefer-dist laravel/laravel 项目名称 9.*
-# 或
 composer create-project --prefer-dist laravel/laravel 项目名称
 ```
 
@@ -68,11 +64,16 @@ DB_PASSWORD=
 
 安装`dcat-admin`
 
+> **注意：** Laravel 版本小于 13 时，请使用 `composer require wmlc/laravel-admin:"^2.3"` 安装 2.3.2 及以下版本。
 
-```
+```bash
 cd {项目名称}
 
+# Laravel 13.x
 composer require wmlc/laravel-admin
+
+# Laravel < 13
+composer require wmlc/laravel-admin:"^2.3"
 ```
 
 然后运行下面的命令来发布资源：
@@ -106,10 +107,8 @@ location / {
 
 | 扩展                                        | 描述                              | dcat-admin 版本                             |
 | ------------------------------------------------ | ---------------------------------------- |---------------------------------------- |
-| [mosiboom/dcat-iframe-tab](https://github.com/mosiboom/dcat-iframe-tab)    | IFRAME TAB标签切换 | 2.x |
-| [super-eggs/dcat-distpicker](https://github.com/super-eggs/dcat-distpicker)    | 省市区联动 | 2.x |
-| [ueditor](https://github.com/jqhph/dcat-admin-ueditor) | 百度在线编辑器     | 1.x |
-| [grid-sortable](https://github.com/jqhph/dcat-admin-grid-sortable) | 表格拖曳排序工具      | 1.x |
+| [mosiboom/dcat-iframe-tab](https://github.com/mosiboom/dcat-iframe-tab)    | IFRAME TAB标签切换 | 2.x / 3.x |
+| [super-eggs/dcat-distpicker](https://github.com/super-eggs/dcat-distpicker)    | 省市区联动 | 2.x / 3.x |
 
 
 ### 鸣谢
@@ -139,33 +138,8 @@ location / {
 
 ### Contributors
 
-#### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/jqhph/dcat-admin/graphs/contributors"><img src="https://opencollective.com/dcat-admin/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/dcat-admin/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/dcat-admin"><img src="https://opencollective.com/dcat-admin/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/dcat-admin/contribute)]
-
-<a href="https://opencollective.com/dcat-admin/organization/0/website"><img src="https://opencollective.com/dcat-admin/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/1/website"><img src="https://opencollective.com/dcat-admin/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/2/website"><img src="https://opencollective.com/dcat-admin/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/3/website"><img src="https://opencollective.com/dcat-admin/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/4/website"><img src="https://opencollective.com/dcat-admin/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/5/website"><img src="https://opencollective.com/dcat-admin/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/6/website"><img src="https://opencollective.com/dcat-admin/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/7/website"><img src="https://opencollective.com/dcat-admin/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/8/website"><img src="https://opencollective.com/dcat-admin/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/dcat-admin/organization/9/website"><img src="https://opencollective.com/dcat-admin/organization/9/avatar.svg"></a>
+This project exists thanks to all the people who contribute.
+<a href="https://github.com/wmlc/dcat-admin/graphs/contributors"><img src="https://opencollective.com/dcat-admin/contributors.svg?width=890&button=false" /></a>
 
 ### License
 ------------
