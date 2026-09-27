@@ -158,6 +158,16 @@ class Markdown extends Field
             $this->options['imageUploadURL'] = $this->defaultImageUploadUrl();
         }
 
+        // 默认开启图片粘贴上传插件（宿主自定义了 onload 时不覆盖）
+        // editormd 在编辑器初始化完成后以 this 绑定调用 onload（见 editormd.js），故此处 this 即编辑器实例
+        if (! isset($this->options['onload'])) {
+            $this->options['onload'] = JavaScript::make(<<<'JS'
+function () {
+    this.executePlugin('imagePaste', 'image-handle-paste/image-handle-paste');
+}
+JS);
+        }
+
         $this->requireLang();
 
         $this->addVariables(['options' => JavaScript::format($this->options)]);
