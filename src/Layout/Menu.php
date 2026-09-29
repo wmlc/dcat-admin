@@ -5,6 +5,7 @@ namespace Dcat\Admin\Layout;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Support\Helper;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 
 class Menu
 {
@@ -40,6 +41,13 @@ class Menu
     ];
 
     protected $view = 'admin::partials.menu';
+
+    /**
+     * 当前请求路径命中的菜单 uri，false 表示尚未解析.
+     *
+     * @var bool|string|null
+     */
+    protected $resolvedMatch = false;
 
     public function register()
     {
@@ -127,15 +135,11 @@ class Menu
         }
 
         if (empty($item['children'])) {
-            if (empty($item['uri'])) {
-                return false;
-            }
-
-            return trim($this->getPath($item['uri']), '/') == $path;
+            return $this->uriIsActive($item['uri'] ?? null, $path);
         }
 
         foreach ($item['children'] as $v) {
-            if ($path == trim($this->getPath($v['uri']), '/')) {
+            if ($this->uriIsActive($v['uri'] ?? null, $path)) {
                 return true;
             }
             if (! empty($v['children'])) {
@@ -146,6 +150,94 @@ class Menu
         }
 
         return false;
+    }
+
+    /**
+     * 判断菜单 uri 是否命中当前请求路径.
+     *
+     * 除精确匹配外，还支持按路径段的最长前缀匹配，
+     * 使资源路由的详情、编辑等子页面（如 orders/12/edit）也能定位到所属菜单.
+     *
+     * @param  string|null  $uri
+     * @param  string  $path
+     * @return bool
+     */
+    protected function uriIsActive($uri, string $path)
+    {
+        if (empty($uri)) {
+            return false;
+        }
+
+        $menuPath = trim($this->getPath($uri), '/');
+
+        if ($menuPath === '') {
+            return false;
+        }
+
+        if ($menuPath == trim($path, '/')) {
+            return true;
+        }
+
+        // 当前路径存在精确命中的菜单时，前缀匹配让位，避免多个菜单同时高亮
+        if (($matched = $this->matchedUri($path)) === null || trim($this->getPath($matched), '/') !== $menuPath) {
+            return false;
+        }
+
+        return Str::startsWith(trim($path, '/'), $menuPath.'/');
+    }
+
+    /**
+     * 解析与当前请求路径前缀匹配的最长菜单 uri.
+     *
+     * @param  string  $path
+     * @return string|null
+     */
+    public function matchedUri(string $path)
+    {
+        if ($this->resolvedMatch !== false) {
+            return $this->resolvedMatch;
+        }
+
+        $path = trim($path, '/');
+
+        $best = null;
+        $bestLength = -1;
+
+        foreach ($this->menuUris() as $uri) {
+            if (empty($uri) || Str::startsWith($uri, ['http://', 'https://'])) {
+                continue;
+            }
+
+            $menuPath = trim($this->getPath($uri), '/');
+
+            if ($menuPath === '') {
+                continue;
+            }
+
+            if ($menuPath === $path) {
+                $best = $uri;
+                break;
+            }
+
+            if (Str::startsWith($path, $menuPath.'/') && \strlen($menuPath) > $bestLength) {
+                $best = $uri;
+                $bestLength = \strlen($menuPath);
+            }
+        }
+
+        return $this->resolvedMatch = $best;
+    }
+
+    /**
+     * 获取全部菜单 uri.
+     *
+     * @return array
+     */
+    protected function menuUris()
+    {
+        $model = config('admin.database.menu_model');
+
+        return (new $model)->newQuery()->pluck('uri')->all();
     }
 
     /**
