@@ -231,13 +231,15 @@ class Menu
     /**
      * 获取全部菜单 uri.
      *
+     * 复用 allNodes 的菜单缓存，避免每次请求绕过缓存直查数据库.
+     *
      * @return array
      */
     protected function menuUris()
     {
         $model = config('admin.database.menu_model');
 
-        return (new $model)->newQuery()->pluck('uri')->all();
+        return (new $model)->allNodes()->pluck('uri')->all();
     }
 
     /**
