@@ -11,4 +11,5 @@ pre-dist
 *.bak.*
 .DS_Store
 .workbuddy
+.qoder
 
